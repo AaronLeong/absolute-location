@@ -19,6 +19,7 @@ io.on('connection', function (socket) {
   });
 });
 
+// AHRS
 var cmdArguments = ['-c', 'minimu9-ahrs -b /dev/i2c-1 --output euler'];
 var rl = require('readline');
 
@@ -42,7 +43,6 @@ linereader.on('line', function (line) {
   };
 
   io.sockets.emit('updateAHRS', ahrs_data);
-  console.log(values[offset] + ' ' + values[offset+1] + " " +values[offset+2]);
 });
 
 ahrssource.stderr.on('data', function (data) {
