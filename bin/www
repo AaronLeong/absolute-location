@@ -3,7 +3,7 @@ var debug = require('debug')('expressapp');
 var app = require('../app');
 var scanner = require('../lib/scanner');
 
-app.set('port', process.env.PORT || 8888);
+app.set('port', process.env.PORT || 3000);
 
 var server = require('http').createServer(app);
 server.listen(app.get('port'), function() {
@@ -13,30 +13,42 @@ server.listen(app.get('port'), function() {
 var io = require('socket.io')(server);
 io.on('connection', function (socket) {
   socket.emit('update', { hello: 'world' });
-});
 
-/*
-scanner.events.on('dumpRssi', function(beacon) {
-  io.sockets.emit('updateBeacon', {
-    uuid: beacon.peripheral.uuid,
-    accuracy: beacon.get_accuracy(),
-    x: beacon.x,
-    y: beacon.y,
-    updated_at: new Date()
+  socket.on('updateBeaconAxis', function(beacon) {
+    scanner.peripherals.update_axis(beacon);
   });
 });
 
-scanner.events.on('dumpLocation', function(pos) {
-  io.sockets.emit('updateLocation', {
-    pos: pos,
-    updated_at: new Date()
-  });
+var cmdArguments = ['-c', 'minimu9-ahrs -b /dev/i2c-1 --output euler'];
+var rl = require('readline');
+
+var ahrssource = require('child_process').spawn('sh', cmdArguments);
+linereader = rl.createInterface(ahrssource.stdout, ahrssource.stdin);
+
+linereader.on('line', function (line) {
+  var values = line.replace(/ +(?= )/g,'').split(' ');
+  var offset = values[0] === '' ? 1 : 0;
+
+  var ahrs_data = {
+    pitch:  Number(values[offset]),
+    yaw:    Number(values[offset+1]),
+    roll:   Number(values[offset+2]),
+    accelX: Number(values[offset+3]),
+    accelY: Number(values[offset+4]),
+    accelZ: Number(values[offset+5]),
+    gyroX:  Number(values[offset+6]),
+    gyroY:  Number(values[offset+7]),
+    gyroZ:  Number(values[offset+8])
+  };
+
+  io.sockets.emit('updateAHRS', ahrs_data);
+  console.log(values[offset] + ' ' + values[offset+1] + " " +values[offset+2]);
 });
 
-scanner.init(500);
-*/
+ahrssource.stderr.on('data', function (data) {
+  console.log('ahrs-err:' + data);
+});
 
-
-var server = app.listen(app.get('port'), function() {
-  debug('Express server listening on port ' + server.address().port);
+ahrssource.on('close', function (code) {
+  console.log('ahrs process exited with code ' + code);
 });
