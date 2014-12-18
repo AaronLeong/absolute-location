@@ -3,7 +3,34 @@
 <div class="container">
   <div class="col-md-12" ng-app="AHRSApp">
     <div ng-controller="AHRSCtrl">
-      {{ahrs_data}}
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Pitch</th>
+            <th>Yaw</th>
+            <th>Roll</th>
+            <th>AccelX</th>
+            <th>AccelY</th>
+            <th>AccelZ</th>
+            <th>gyroX</th>
+            <th>gyroY</th>
+            <th>gyroZ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ahrs_data.pitch}}</td>
+            <td>{{ahrs_data.yaw}}</td>
+            <td>{{ahrs_data.roll}}</td>
+            <td>{{ahrs_data.accelX}}</td>
+            <td>{{ahrs_data.accelY}}</td>
+            <td>{{ahrs_data.accelZ}}</td>
+            <td>{{ahrs_data.gyroX}}</td>
+            <td>{{ahrs_data.gyroY}}</td>
+            <td>{{ahrs_data.gyroZ}}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
