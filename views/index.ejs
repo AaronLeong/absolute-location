@@ -6,6 +6,113 @@
       <% include ahrs_table %>
     </div>
   </div>
+
+  <div id="canvas"></div>
 </div>
 
 <% include footer %>
+
+<script>
+  var container, stats, canvas;
+
+  var camera, scene, renderer;
+
+  var cube, plane;
+
+  var mouseX = 0;
+  var mouseXOnMouseDown = 0;
+
+  var windowWidth  = 0;
+  var windowHeight = window.innerHeight * 0.75;
+
+  var windowHalfX = windowWidth / 2;
+  var windowHalfY = windowHeight / 2;
+
+  init();
+  animate();
+
+  function init() {
+
+    container = document.createElement('div');
+    canvas = document.getElementById('canvas');
+    canvas.appendChild( container );
+
+    canvas.style.position = 'relative';
+    windowWidth = canvas.offsetWidth;
+
+    camera = new THREE.PerspectiveCamera( 70, windowWidth / windowHeight, 1, 1000 );
+    camera.position.y = 150;
+
+    camera.position.x = 500;
+    camera.position.z = 500;
+
+    camera.rotation.y = 45 * Math.PI / 180;
+
+    camera.rotation.x = 0 * Math.PI / 180;
+    camera.rotation.z = 0 * Math.PI / 180;
+
+    scene = new THREE.Scene();
+
+    // Cube
+
+    var geometry = new THREE.BoxGeometry( 200, 50, 400 );
+
+    for ( var i = 0; i < geometry.faces.length; i += 2 ) {
+
+      var hex = Math.random() * 0xffffff;
+      geometry.faces[ i ].color.setHex( hex );
+      geometry.faces[ i + 1 ].color.setHex( hex );
+
+    }
+
+    var material = new THREE.MeshBasicMaterial( { vertexColors: THREE.FaceColors, overdraw: 0.5 } );
+
+    cube = new THREE.Mesh( geometry, material );
+    cube.position.y = 150;
+    scene.add( cube );
+
+    // Renderer
+
+    renderer = new THREE.CanvasRenderer();
+    renderer.setClearColor( 0xf0f0f0 );
+    renderer.setSize(windowWidth,  windowHeight);
+
+    container.appendChild( renderer.domElement );
+
+    // Stats
+
+    stats = new Stats();
+    stats.domElement.style.position = 'absolute';
+    stats.domElement.style.top = '0px';
+    container.appendChild( stats.domElement );
+
+    //
+
+    window.addEventListener( 'resize', onWindowResize, false );
+  }
+
+  function onWindowResize() {
+
+    windowWidth  = canvas.offsetWidth;
+    windowHeight = window.innerHeight * 0.75;
+    windowHalfX  = windowWidth / 2;
+    windowHalfY  = windowHeight / 2;
+
+    camera.aspect = windowWidth / windowHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize( windowWidth, windowHeight );
+  }
+
+
+  function animate() {
+    requestAnimationFrame( animate );
+
+    render();
+    stats.update();
+  }
+
+  function render() {
+    renderer.render( scene, camera );
+  }
+</script>
