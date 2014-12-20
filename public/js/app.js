@@ -27,9 +27,9 @@
         $scope.ahrs_data[key] = ahrs_data[key];
       }
 
-      cube.rotation.y  = -1 * ahrs_data.pitch / 180 * Math.PI ;
-      cube.rotation.x  =  1 * ahrs_data.roll  / 180 * Math.PI;
-      cube.rotation.z  = -1 * ahrs_data.yaw   / 180 * Math.PI;
+      cube.rotation.x  = -1 * ahrs_data.pitch / 180 * Math.PI ;
+      cube.rotation.y  = -1 * ahrs_data.yaw   / 180 * Math.PI;
+      cube.rotation.z  = -1 * ahrs_data.roll  / 180 * Math.PI;
     });
   });
 })();
