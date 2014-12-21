@@ -49,9 +49,9 @@
       cube.rotation.y  = 1 * ahrs_data.yaw   / 180 * Math.PI;
       cube.rotation.x  = 1 * ahrs_data.roll  / 180 * Math.PI;
 
-      $scope.acceleration_x.values.push([$scope.acceleration_index, -cube.accelX]);
-      $scope.acceleration_y.values.push([$scope.acceleration_index, cube.accelY]);
-      $scope.acceleration_z.values.push([$scope.acceleration_index, -cube.accelZ]);
+      $scope.acceleration_x[0].values.push([$scope.acceleration_index, -cube.accelX]);
+      $scope.acceleration_y[0].values.push([$scope.acceleration_index, cube.accelY]);
+      $scope.acceleration_z[0].values.push([$scope.acceleration_index, -cube.accelZ]);
       $scope.acceleration_index += 1;
     });
   });
