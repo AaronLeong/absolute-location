@@ -14,6 +14,10 @@
     "angular-animate": "~1.2.21",
     "angular-moment": "~0.7.1",
     "socket.io": "~1.0.6",
-    "three": "https://github.com/mrdoob/three.js"
+    "three": "https://github.com/mrdoob/three.js",
+    
+    "d3": "~3.5.2",
+    "nvd3": "~1.1.15-beta",
+    "angularjs-nvd3-directives": "~0.0.7"
   }
 }
