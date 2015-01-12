@@ -13,34 +13,6 @@ server.listen(app.get('port'), function() {
 var io = require('socket.io')(server);
 io.on('connection', function (socket) {
   socket.emit('update', { hello: 'world' });
-
-  socket.on('updateBeaconAxis', function(beacon) {
-    scanner.peripherals.update_axis(beacon);
-  });
 });
-
-scanner.events.on('dumpRssi', function(beacon) {
-  io.sockets.emit('updateBeacon', {
-    uuid: beacon.peripheral.uuid,
-    accuracy: beacon.get_accuracy(),
-    x: beacon.x,
-    y: beacon.y,
-    updated_at: new Date()
-  });
-});
-
-scanner.events.on('dumpLocation', function(pos) {
-  io.sockets.emit('updateLocation', {
-    pos: pos,
-    updated_at: new Date()
-  });
-});
-
 
 scanner.init(500);
-
-/*
-var server = app.listen(app.get('port'), function() {
-  debug('Express server listening on port ' + server.address().port);
-});
-*/
