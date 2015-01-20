@@ -76,7 +76,7 @@ locateApp.controller('locateCtrl', function ($scope, $http, socket) {
     }
 
     j[0] = brd.create('intersection',[c[(near_index-1)%4],c[(near_index+k+1)%4],0],{name:'',strokeColor:'black',fillColor:'black'});
-    brd.createElement('line',[p[(near_index-2)%4], j[0], {strokeColor:'gray', strokeWidth:2});
+    brd.createElement('line',[p[(near_index-2)%4], j[0]], {strokeColor:'gray', strokeWidth:2});
 
     var min_x = 0, min_y = 0, min_length = 0;
 /*
