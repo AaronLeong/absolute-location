@@ -75,25 +75,22 @@ locateApp.controller('locateCtrl', function ($scope, $http, socket) {
       c[k] = brd.createElement('circle',[p[k], beacons[k].accuracy*100], {strokeColor:colors[k], strokeWidth:1});
     }
 
-    j[0] = brd.create('intersection',[c[(near_index-1)%4],c[(near_index+k+1)%4],0],{name:'',strokeColor:'black',fillColor:'black'});
-    brd.createElement('line',[p[(near_index-2)%4], j[0]], {strokeColor:'gray', strokeWidth:2});
+    j[0] = brd.create('intersection',[c[(near_index-1)%4],c[(near_index+k+1)%4],0],{name:'',strokeColor:'gray',fillColor:'gray'});
+    l[0] = brd.createElement('line',[p[(near_index-2)%4], j[0]], {strokeColor:'gray', strokeWidth:1});
 
-    var min_x = 0, min_y = 0, min_length = 0;
-/*
-    for (k=0;k<3;k++) {
-      if (!(j[k].X() == 0 && j[k].Y() == 0) && (50 < j[k].X() && j[k].X() < 250 && 50 < j[k].Y() &&  j[k].Y() < 250)) {
-        min_x += j[k].X();
-        min_y += j[k].Y();
-        min_length++;
-      }
-    }
-*/
+    j[1] = brd.create('intersection',[c[(near_index-1)%4],l[0],0],{name:'',strokeColor:'gray',fillColor:'gray'});
+    j[2] = brd.create('intersection',[c[(near_index-1)%4],l[0],1],{name:'',strokeColor:'gray',fillColor:'gray'});
 
-    if (!(min_x == 0 && min_y == 0)) {
-      brd.create('point',[min_x/min_length,min_y/min_length],  {name:'Position',strokeColor:'red',fillColor:'red'});
+    if (50 < j[1].X() && j[1].X() < 250 && 50 < j[1].Y() &&  j[1].Y() < 250)
+      j[3] = j[1];
+    else if (50 < j[2].X() && j[2].X() < 250 && 50 < j[2].Y() &&  j[2].Y() < 250)
+      j[3] = j[2];
+
+    if (j[3]) {
+      brd.create('point',[j[3].X(),j[3].Y()],  {name:'Position',strokeColor:'red',fillColor:'red'});
       $scope.last_point = {
-        x: min_x/min_length,
-        y: min_y/min_length
+        x: j[3].X(),
+        y: j[3].Y()
       };
     } else if ($scope.last_point) {
       brd.create('point',[$scope.last_point.x, $scope.last_point.y],  {name:'Position',strokeColor:'red',fillColor:'red'});
