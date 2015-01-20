@@ -1,3 +1,10 @@
+/*
+7c669d777237 A
+7c669d776ee3 B
+bc6a29b15c58 C
+7c669d777032 D
+*/
+
 var locateApp = angular.module('locateApp', ['ngAnimate', 'angularMoment', 'btford.socket-io']);
 locateApp.run(function(amMoment) {
   amMoment.changeLanguage('zh-tw');
@@ -23,11 +30,6 @@ locateApp.controller('locateCtrl', function ($scope, $http, socket) {
       $scope.beacons.push(beacon);
   };
 
-  $scope.update_beacon_axis = function(beacon) {
-    socket.emit('updateBeaconAxis', beacon);
-    $scope.update_axis_chart();
-  };
-
   $scope.update_axis_chart = function() {
     var board = JXG.JSXGraph.initBoard('box', {boundingbox: [-100, 3000, 3000, -200], axis:true});
     for (var i = 0; i < $scope.beacons.length; i++) {
@@ -38,13 +40,8 @@ locateApp.controller('locateCtrl', function ($scope, $http, socket) {
     var p = board.create('point', [$scope.position.x*100, $scope.position.y*100], {color: 'red'});
   };
 
-  socket.on('updateBeacon', function (beacon) {
-    $scope.update_beacons(beacon);
-  });
-
-  socket.on('updateLocation', function (location) {
-//    console.log(beacon.uuid + ' update axis');
-    $scope.position = location.pos;
-    $scope.update_axis_chart();
+  socket.on('updateBeacons', function (beacons) {
+    for (var i = 0; i < beacons.length; i++)
+      $scope.update_beacon(beacons[i]);
   });
 });

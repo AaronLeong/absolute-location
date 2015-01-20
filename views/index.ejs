@@ -5,6 +5,39 @@
     <div id="box" class="jxgbox" style="width:600px; height:600px;"></div>
     <script type="text/javascript">
 
+    var brd = JXG.JSXGraph.initBoard('box',{boundingbox:[-50,300,300,-50], keepaspectratio:true, axis:true});
+    var colors = [], p = [], l = [], c = [], j = [], k;
+
+    p[0] = brd.create('point',[50,50],  {name:'A',strokeColor:'yellow',fillColor:'yellow'});
+    p[1] = brd.create('point',[250,50], {name:'B',strokeColor:'orange',fillColor:'orange'});
+    p[2] = brd.create('point',[250,250],{name:'C',strokeColor:'blue',  fillColor:'blue'});
+    p[3] = brd.create('point',[50,250], {name:'D',strokeColor:'green', fillColor:'green'});
+
+    l = [150, 160, 170, 30];
+    colors = ['yellow', 'orange', 'blue', 'green'];
+
+    for (k=0;k<4;k++) {
+      c[k] = brd.createElement('circle',[p[k], l[k]], {strokeColor:colors[k], strokeWidth:1});
+    }
+
+    for (k=0;k<4;k++) {
+      j[k] = brd.create('intersection',[c[k],c[(k+2)%4],0],{name:'',strokeColor:'gray',fillColor:'gray'});
+    }
+
+    var min_x = 0, min_y = 0, min_length = 0;
+
+    for (k=0;k<4;k++) {
+      if (!(j[k].X() == 0 && j[k].Y() == 0)) {
+        min_x += j[k].X();
+        min_y += j[k].Y();
+        min_length++;
+      }
+    }
+
+    brd.create('point',[min_x/min_length,min_y/min_length],  {name:'A',strokeColor:'red',fillColor:'red'});
+
+    brd.update();
+
     </script>
   </div>
   <div class="col-md-4" ng-app="locateApp">
