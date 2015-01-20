@@ -80,7 +80,7 @@ locateApp.controller('locateCtrl', function ($scope, $http, socket) {
 
     var min_x = 0, min_y = 0, min_length = 0;
     for (k=0;k<3;k++) {
-      if (!(j[k].X() == 0 && j[k].Y() == 0) && (50 < j[k].X() < 250 && 50 < j[k].Y() < 250)) {
+      if (!(j[k].X() == 0 && j[k].Y() == 0) && (50 < j[k].X() && j[k].X() < 250 && 50 < j[k].Y() &&  j[k].Y() < 250)) {
 
         min_x += j[k].X();
         min_y += j[k].Y();
