@@ -78,8 +78,8 @@ locateApp.controller('locateCtrl', function ($scope, $http, socket) {
     j[0] = brd.create('intersection',[c[(near_index-1)%4],c[(near_index+k+1)%4],0],{name:'',strokeColor:'gray',fillColor:'gray'});
     l[0] = brd.createElement('line',[p[(near_index-2)%4], j[0]], {strokeColor:'gray', strokeWidth:1});
 
-    j[1] = brd.create('intersection',[c[(near_index-1)%4],l[0],0],{name:'',strokeColor:'gray',fillColor:'gray'});
-    j[2] = brd.create('intersection',[c[(near_index-1)%4],l[0],1],{name:'',strokeColor:'gray',fillColor:'gray'});
+    j[1] = brd.create('intersection',[c[near_index],l[0],0],{name:'',strokeColor:'gray',fillColor:'gray'});
+    j[2] = brd.create('intersection',[c[near_index],l[0],1],{name:'',strokeColor:'gray',fillColor:'gray'});
 
     if (50 < j[1].X() && j[1].X() < 250 && 50 < j[1].Y() &&  j[1].Y() < 250)
       j[3] = j[1];
