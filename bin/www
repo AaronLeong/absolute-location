@@ -15,4 +15,8 @@ io.on('connection', function (socket) {
   socket.emit('update', { hello: 'world' });
 });
 
+scanner.events.on('updateBeacons', function(beacons) {
+  io.sockets.emit('updateBeacons', beacons);
+});
+
 scanner.init(500);
