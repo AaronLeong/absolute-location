@@ -75,10 +75,11 @@ locateApp.controller('locateCtrl', function ($scope, $http, socket) {
       c[k] = brd.createElement('circle',[p[k], beacons[k].accuracy*100], {strokeColor:colors[k], strokeWidth:1});
     }
 
-    for (k=0;k<3;k++)
-      j[k] = brd.create('intersection',[c[near_index],c[(near_index+k+1)%4],0],{name:'',strokeColor:'black',fillColor:'black'});
+    j[0] = brd.create('intersection',[c[(near_index-1)%4],c[(near_index+k+1)%4],0],{name:'',strokeColor:'black',fillColor:'black'});
+    brd.createElement('line',[p[(near_index-2)%4], j[0], {strokeColor:'gray', strokeWidth:2});
 
     var min_x = 0, min_y = 0, min_length = 0;
+/*
     for (k=0;k<3;k++) {
       if (!(j[k].X() == 0 && j[k].Y() == 0) && (50 < j[k].X() && j[k].X() < 250 && 50 < j[k].Y() &&  j[k].Y() < 250)) {
         min_x += j[k].X();
@@ -86,6 +87,7 @@ locateApp.controller('locateCtrl', function ($scope, $http, socket) {
         min_length++;
       }
     }
+*/
 
     if (!(min_x == 0 && min_y == 0)) {
       brd.create('point',[min_x/min_length,min_y/min_length],  {name:'Position',strokeColor:'red',fillColor:'red'});
