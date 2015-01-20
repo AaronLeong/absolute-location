@@ -31,7 +31,7 @@ locateApp.controller('locateCtrl', function ($scope, $http, socket) {
   };
 
   $scope.update_chart = function() {
-    var brd = JXG.JSXGraph.initBoard('box',{boundingbox:[-50,300,300,-50], keepaspectratio:true, axis:true});
+    var brd = JXG.JSXGraph.initBoard('box',{boundingbox:[-50,400,400,-50], keepaspectratio:true, axis:true});
     var colors = [], beacons = [], p = [], l = [], c = [], j = [], k;
 /*
     for (var i = 0; i < $scope.beacons.length; i++) {
@@ -76,12 +76,11 @@ locateApp.controller('locateCtrl', function ($scope, $http, socket) {
     }
 
     for (k=0;k<3;k++)
-      j[k] = brd.create('intersection',[c[near_index],c[(near_index+k+1)%4],1],{name:'',strokeColor:'black',fillColor:'black'});
+      j[k] = brd.create('intersection',[c[near_index],c[(near_index+k+1)%4],0],{name:'',strokeColor:'black',fillColor:'black'});
 
     var min_x = 0, min_y = 0, min_length = 0;
     for (k=0;k<3;k++) {
       if (!(j[k].X() == 0 && j[k].Y() == 0) && (50 < j[k].X() && j[k].X() < 250 && 50 < j[k].Y() &&  j[k].Y() < 250)) {
-
         min_x += j[k].X();
         min_y += j[k].Y();
         min_length++;
