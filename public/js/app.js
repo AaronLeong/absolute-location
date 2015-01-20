@@ -33,7 +33,6 @@ locateApp.controller('locateCtrl', function ($scope, $http, socket) {
   $scope.update_chart = function() {
     var brd = JXG.JSXGraph.initBoard('box',{boundingbox:[-50,300,300,-50], keepaspectratio:true, axis:true});
     var colors = [], beacons = [], p = [], l = [], c = [], j = [], k;
-
 /*
     for (var i = 0; i < $scope.beacons.length; i++) {
       if ($scope.beacons[i].uuid == '92c4bad7cf8a4a6d98960a2369dffce4')
@@ -57,6 +56,15 @@ locateApp.controller('locateCtrl', function ($scope, $http, socket) {
         beacons[3] = $scope.beacons[i];
     }
 
+    var near_beacon = beacons[0], near_index = 0;
+    for (var i = 0; i < $scope.beacons.length; i++) {
+      if (near_beacon.accuracy > beacons[i].accuracy) {
+        near_beacon = beacons[i];
+        near_index  = i;
+      }
+    }
+
+
     colors = ['yellow', 'orange', 'blue', 'green'];
     p[0] = brd.create('point',[50,50],  {name:'A: ' + beacons[0].rssi,strokeColor:'yellow',fillColor:'yellow'});
     p[1] = brd.create('point',[250,50], {name:'B: ' + beacons[1].rssi,strokeColor:'orange',fillColor:'orange'});
@@ -64,19 +72,14 @@ locateApp.controller('locateCtrl', function ($scope, $http, socket) {
     p[3] = brd.create('point',[50,250], {name:'D: ' + beacons[3].rssi,strokeColor:'green', fillColor:'green'});
 
     for (k=0;k<4;k++) {
-      console.log('ok')
       c[k] = brd.createElement('circle',[p[k], beacons[k].accuracy*100], {strokeColor:colors[k], strokeWidth:1});
     }
 
-    for (k=0;k<4;k++)
-      j[k] = brd.create('intersection',[c[k],c[(k+1)%4],1],{name:'',strokeColor:'gray',fillColor:'gray'});
-    for (k=0;k<2;k++)
-      j[k+4] = brd.create('intersection',[c[k],c[(k+2)],1],{name:'',strokeColor:'gray',fillColor:'gray'});
-    j[5] = brd.create('intersection',[c[0],c[(3)],1],{name:'',strokeColor:'gray',fillColor:'gray'});
+    for (k=0;k<3;k++)
+      j[k] = brd.create('intersection',[c[near_index],c[(near_index+k+1)%4],1],{name:'',strokeColor:'gray',fillColor:'gray'});
 
     var min_x = 0, min_y = 0, min_length = 0;
-
-    for (k=0;k<6;k++) {
+    for (k=0;k<3;k++) {
       if (!(j[k].X() == 0 && j[k].Y() == 0)) {
         min_x += j[k].X();
         min_y += j[k].Y();
@@ -84,8 +87,15 @@ locateApp.controller('locateCtrl', function ($scope, $http, socket) {
       }
     }
 
-    if (!(min_x == 0 && min_y == 0))
+    if (!(min_x == 0 && min_y == 0)) {
       brd.create('point',[min_x/min_length,min_y/min_length],  {name:'A',strokeColor:'red',fillColor:'red'});
+      $scope.last_point = {
+        x: min_x/min_length,
+        y: min_y/min_length
+      };
+    } else if ($scope.last_point) {
+      brd.create('point',[$scope.last_point.x, $scope.last_point.y],  {name:'A',strokeColor:'red',fillColor:'red'});
+    }
   };
 
   socket.on('updateBeacons', function (beacons) {
