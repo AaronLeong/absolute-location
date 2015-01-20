@@ -66,7 +66,7 @@ locateApp.controller('locateCtrl', function ($scope, $http, socket) {
 
 
     colors = ['purple', 'orange', 'blue', 'green'];
-    p[0] = brd.create('point',[50,50],  {name:'A',strokeColor:'purple',fillColor:'yellow'});
+    p[0] = brd.create('point',[50,50],  {name:'A',strokeColor:'purple',fillColor:'purple'});
     p[1] = brd.create('point',[250,50], {name:'B',strokeColor:'orange',fillColor:'orange'});
     p[2] = brd.create('point',[250,250],{name:'C',strokeColor:'blue',  fillColor:'blue'});
     p[3] = brd.create('point',[50,250], {name:'D',strokeColor:'green', fillColor:'green'});
@@ -76,7 +76,7 @@ locateApp.controller('locateCtrl', function ($scope, $http, socket) {
     }
 
     for (k=0;k<3;k++)
-      j[k] = brd.create('intersection',[c[near_index],c[(near_index+k+1)%4],1],{name:'',fillColor:'black'});
+      j[k] = brd.create('intersection',[c[near_index],c[(near_index+k+1)%4],1],{name:'',strokeColor:'black',fillColor:'black'});
 
     var min_x = 0, min_y = 0, min_length = 0;
     for (k=0;k<3;k++) {
