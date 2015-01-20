@@ -65,22 +65,23 @@ locateApp.controller('locateCtrl', function ($scope, $http, socket) {
     }
 
 
-    colors = ['yellow', 'orange', 'blue', 'green'];
-    p[0] = brd.create('point',[50,50],  {name:'A: ' + beacons[0].rssi,strokeColor:'yellow',fillColor:'yellow'});
-    p[1] = brd.create('point',[250,50], {name:'B: ' + beacons[1].rssi,strokeColor:'orange',fillColor:'orange'});
-    p[2] = brd.create('point',[250,250],{name:'C: ' + beacons[2].rssi,strokeColor:'blue',  fillColor:'blue'});
-    p[3] = brd.create('point',[50,250], {name:'D: ' + beacons[3].rssi,strokeColor:'green', fillColor:'green'});
+    colors = ['purple', 'orange', 'blue', 'green'];
+    p[0] = brd.create('point',[50,50],  {name:'A',strokeColor:'purple',fillColor:'yellow'});
+    p[1] = brd.create('point',[250,50], {name:'B',strokeColor:'orange',fillColor:'orange'});
+    p[2] = brd.create('point',[250,250],{name:'C',strokeColor:'blue',  fillColor:'blue'});
+    p[3] = brd.create('point',[50,250], {name:'D',strokeColor:'green', fillColor:'green'});
 
     for (k=0;k<4;k++) {
       c[k] = brd.createElement('circle',[p[k], beacons[k].accuracy*100], {strokeColor:colors[k], strokeWidth:1});
     }
 
     for (k=0;k<3;k++)
-      j[k] = brd.create('intersection',[c[near_index],c[(near_index+k+1)%4],1],{name:'',strokeColor:'gray',fillColor:'gray'});
+      j[k] = brd.create('intersection',[c[near_index],c[(near_index+k+1)%4],1],{name:'',fillColor:'black'});
 
     var min_x = 0, min_y = 0, min_length = 0;
     for (k=0;k<3;k++) {
-      if (!(j[k].X() == 0 && j[k].Y() == 0)) {
+      if (!(j[k].X() == 0 && j[k].Y() == 0) && (50 < j[k].X() < 250 && 50 < j[k].Y() < 250)) {
+
         min_x += j[k].X();
         min_y += j[k].Y();
         min_length++;
@@ -88,13 +89,13 @@ locateApp.controller('locateCtrl', function ($scope, $http, socket) {
     }
 
     if (!(min_x == 0 && min_y == 0)) {
-      brd.create('point',[min_x/min_length,min_y/min_length],  {name:'A',strokeColor:'red',fillColor:'red'});
+      brd.create('point',[min_x/min_length,min_y/min_length],  {name:'Position',strokeColor:'red',fillColor:'red'});
       $scope.last_point = {
         x: min_x/min_length,
         y: min_y/min_length
       };
     } else if ($scope.last_point) {
-      brd.create('point',[$scope.last_point.x, $scope.last_point.y],  {name:'A',strokeColor:'red',fillColor:'red'});
+      brd.create('point',[$scope.last_point.x, $scope.last_point.y],  {name:'Position',strokeColor:'red',fillColor:'red'});
     }
   };
 
