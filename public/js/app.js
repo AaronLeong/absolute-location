@@ -100,10 +100,12 @@ locateApp.controller('locateCtrl', function ($scope, $http, $interval, socket) {
       brd.create('point',[$scope.last_point.x, $scope.last_point.y],  {name:'Position',strokeColor:'red',fillColor:'red'});
     }
 
-    var x = ($scope.last_point.x-50)/100,
-        z = ($scope.last_point.z-50)/100;
-        
-    socket.emit('updatePosition', {x: x, y: 0, z: z});
+    if ($scope.last_point) {
+      var x = (($scope.last_point.x-150)/100)*2,
+          z = (($scope.last_point.z-150)/100)*2;
+
+      socket.emit('updatePosition', {x: x, y: 0, z: z});
+    }
   };
 
 /*
