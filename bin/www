@@ -1,9 +1,13 @@
 #!/usr/bin/env node
+
+//amqp://admin:admin@140.119.176.124
+//demo.EXCHANGE1
+
 var debug = require('debug')('expressapp');
 var app = require('../app');
 var scanner = require('../lib/scanner');
 
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 9000);
 
 var server = require('http').createServer(app);
 server.listen(app.get('port'), function() {
@@ -11,12 +15,30 @@ server.listen(app.get('port'), function() {
 });
 
 var io = require('socket.io')(server);
+var updatePositionCallback = null;
 io.on('connection', function (socket) {
   socket.emit('update', { hello: 'world' });
+
+  socket.on('updatePosition', function(position) {
+    if (updatePositionCallback) { updatePositionCallback(position); }
+  });
 });
 
-scanner.events.on('updateBeacons', function(beacons) {
-  io.sockets.emit('updateBeacons', beacons);
+require('amqplib/callback_api')
+.connect('amqp://admin:admin@140.119.163.199', function(err, conn) {
+  if (err != null) bail(err);
+  conn.createChannel(function(err, ch) {
+    ch.assertExchange('demo.EXCHANGE1', 'fanout', {durable: false}, function(err, ex) {
+      console.log('amqp connected');
+
+      updatePositionCallback = function(position) {
+        console.log('update position');
+        ch.publish('demo.EXCHANGE1', '', new Buffer(JSON.stringify({
+          Position: position
+        })));
+      };
+    })
+  });
 });
 
 scanner.init(500);

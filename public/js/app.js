@@ -14,7 +14,7 @@ locateApp.factory('socket', function (socketFactory) {
   return socketFactory();
 });
 
-locateApp.controller('locateCtrl', function ($scope, $http, socket) {
+locateApp.controller('locateCtrl', function ($scope, $http, $interval, socket) {
   $scope.beacons = [];
   $scope.postion = null;
 
@@ -96,10 +96,22 @@ locateApp.controller('locateCtrl', function ($scope, $http, socket) {
         x: j[3].X(),
         y: j[3].Y()
       };
+
+      var x = (j[3].X()-50)/100,
+          z = (j[3].Z()-50)/100;
+      socket.emit('updatePosition', {x: x, y: 0, z: z});
+
     } else if ($scope.last_point) {
       brd.create('point',[$scope.last_point.x, $scope.last_point.y],  {name:'Position',strokeColor:'red',fillColor:'red'});
     }
   };
+
+/*
+  $interval(function() {
+    console.log('p');
+    //
+  }, 1000);
+*/
 
   socket.on('updateBeacons', function (beacons) {
     for (var i = 0; i < beacons.length; i++)
