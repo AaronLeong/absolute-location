@@ -41,4 +41,8 @@ require('amqplib/callback_api')
   });
 });
 
+scanner.events.on('updateBeacons', function(beacons) {
+  io.sockets.emit('updateBeacons', beacons);
+});
+
 scanner.init(500);
