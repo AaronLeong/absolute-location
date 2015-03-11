@@ -96,14 +96,14 @@ locateApp.controller('locateCtrl', function ($scope, $http, $interval, socket) {
         x: j[3].X(),
         y: j[3].Y()
       };
-
-      var x = (j[3].X()-50)/100,
-          z = (j[3].Z()-50)/100;
-      socket.emit('updatePosition', {x: x, y: 0, z: z});
-
     } else if ($scope.last_point) {
       brd.create('point',[$scope.last_point.x, $scope.last_point.y],  {name:'Position',strokeColor:'red',fillColor:'red'});
     }
+
+    var x = ($scope.last_point.x-50)/100,
+        z = ($scope.last_point.z-50)/100;
+        
+    socket.emit('updatePosition', {x: x, y: 0, z: z});
   };
 
 /*
