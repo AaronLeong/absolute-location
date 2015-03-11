@@ -56,7 +56,7 @@ locateApp.controller('locateCtrl', function ($scope, $http, $interval, socket) {
         beacons[3] = $scope.beacons[i];
     }
 
-    var near_beacon = beacons[0], near_index = 0;
+    var near_beacon = $scope.beacons[0], near_index = 0;
     for (var i = 0; i < $scope.beacons.length; i++) {
       if (near_beacon.accuracy > beacons[i].accuracy) {
         near_beacon = beacons[i];
