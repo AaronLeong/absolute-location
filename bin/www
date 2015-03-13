@@ -41,8 +41,29 @@ require('amqplib/callback_api')
   });
 });
 
+/*
 scanner.events.on('updateBeacons', function(beacons) {
   io.sockets.emit('updateBeacons', beacons);
 });
 
 scanner.init(500);
+*/
+
+// LE
+var cmdArguments = ['-c', 'sudo btmon'];
+var rl = require('readline');
+
+var lesource = require('child_process').spawn('sh', cmdArguments);
+linereader = rl.createInterface(lesource.stdout, lesource.stdin);
+
+linereader.on('line', function (line) {
+  console.log(line);
+});
+
+lesource.stderr.on('data', function (data) {
+  console.log('le-err:' + data);
+});
+
+lesource.on('close', function (code) {
+  console.log('le process exited with code ' + code);
+});
