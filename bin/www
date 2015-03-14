@@ -66,12 +66,33 @@ var rl = require('readline');
 var lesource = require('child_process').spawn('sh', cmdArguments);
 linereader = rl.createInterface(lesource.stdout, lesource.stdin);
 
+var record_toggle = false,
+    record_entity = {},
+    record_list = [];
+
 linereader.on('line', function (line) {
   var sep = line.split(' ').clean('');
+
+  if (sep[0] == 'LE' && sep[1] == 'Advertising' && sep[2] == 'Report' && !record_toggle) {
+    record_entity = {recieve_at: Date.now()};
+    record_toggle = true;
+  } else if (record_toggle) {
+    if (sep[0] == 'Address:') {
+      record_entity.address = sep[1];
+    } else if (sep[0] == 'RSSI:') {
+      record_entity.rssi = sep[1];
+      record_list.push(record_entity);
+
+      console.log(record_entity);
+      record_toggle = false;
+    }
+  }
+/*
   for (var i = 0; i < sep.length; i++) {
     console.log(sep[i]);
   }
   console.log('===');
+*/
 });
 
 lesource.stderr.on('data', function (data) {
