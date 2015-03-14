@@ -3,6 +3,16 @@
 //amqp://admin:admin@140.119.176.124
 //demo.EXCHANGE1
 
+Array.prototype.clean = function(deleteValue) {
+  for (var i = 0; i < this.length; i++) {
+    if (this[i] == deleteValue) {
+      this.splice(i, 1);
+      i--;
+    }
+  }
+  return this;
+};
+
 var debug = require('debug')('expressapp');
 var app = require('../app');
 var scanner = require('../lib/scanner');
@@ -57,7 +67,7 @@ var lesource = require('child_process').spawn('sh', cmdArguments);
 linereader = rl.createInterface(lesource.stdout, lesource.stdin);
 
 linereader.on('line', function (line) {
-  var sep = line.split(' ');
+  var sep = line.split(' ').clean('');
   for (var i = 0; i < sep.length; i++) {
     console.log(sep[i]);
   }
