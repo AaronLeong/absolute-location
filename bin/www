@@ -83,7 +83,7 @@ linereader.on('line', function (line) {
       record_entity.rssi = sep[1];
       record_list.push(record_entity);
 
-      console.log('---'+Date(record_entity.recieve_at).getSeconds()+'/'+Date(record_entity.recieve_at).getMilliseconds())
+      console.log('---'+Date(record_entity.recieve_at))
       console.log(record_entity);
       record_toggle = false;
     }
