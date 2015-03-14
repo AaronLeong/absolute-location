@@ -57,6 +57,7 @@ var lesource = require('child_process').spawn('sh', cmdArguments);
 linereader = rl.createInterface(lesource.stdout, lesource.stdin);
 
 linereader.on('line', function (line) {
+  var sep = line.split(' ');
   for (var i = 0; i < sep.length; i++) {
     console.log(sep[i]);
   }
