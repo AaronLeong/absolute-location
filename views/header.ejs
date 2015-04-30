@@ -28,6 +28,11 @@
     <div class="container">
       <div class="navbar-header">
         <a class="navbar-brand" href="#">絕對定位</a>
+
+        <ul class="nav navbar-nav">
+          <li ng-class="(status == 'setting') ? 'active' : ''"><a href="#" ng-click="set_page('setting')">設定 UUID</a></li>
+          <li ng-class="(status == 'start') ? 'active' : ''"><a href="#" ng-click="set_page('start')">開始</a></li>
+        </ul>
       </div>
       <div id="navbar" class="collapse navbar-collapse">
       </div><!--/.nav-collapse -->
